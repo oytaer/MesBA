@@ -1,0 +1,28 @@
+# ============================================================================
+# mesba_core —— 核心数据结构 crate
+# ============================================================================
+# 职责：Block/Connection/Pulse/Buffer/ID/Value 等基础类型定义 + trait 抽象
+# 重要性：整个 MesBA 架构的基石，所有其他 crate 都依赖本 crate
+# ============================================================================
+
+[package]
+name = "mesba_core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "MesBA core data structures — Block / Connection / Pulse / Buffer / ID / Value / Integer ops"
+
+# ---------------------------------------------------------------------------
+# 依赖配置 —— core crate 保持轻量，只引入必要的序列化和错误处理
+# ---------------------------------------------------------------------------
+[dependencies]
+serde = { workspace = true }
+thiserror = { workspace = true }
+rand = { workspace = true }
+
+# ---------------------------------------------------------------------------
+# 开发依赖 —— 单元测试所需
+# ---------------------------------------------------------------------------
+[dev-dependencies]

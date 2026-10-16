@@ -1,0 +1,13 @@
+[package]
+name = "mesba_learning"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "MesBA learning algorithms — Hebbian / threshold / pruning / chunking"
+
+[dependencies]
+mesba_core = { path = "../mesba_core" }
+mesba_network = { path = "../mesba_network" }
+serde = { workspace = true }
+thiserror = { workspace = true }

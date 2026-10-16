@@ -1,0 +1,104 @@
+# ============================================================================
+# MesBA — 网状区块架构（Mesh Block Architecture）Workspace 根配置
+# ============================================================================
+# 对应架构版本：MesBA v2 / MeshBlock v2
+# 语言栈：Rust 1.99+ (edition 2024)
+# 说明：顶层 package 保留 mesba 名称作为默认 binary（主程序入口）
+# ============================================================================
+
+[workspace]
+# ---------------------------------------------------------------------------
+# 成员 crate 列表 —— 按编程语言选型文档规划的8个 crate
+# ---------------------------------------------------------------------------
+members = [
+    "crates/mesba_core",      # 核心数据结构（Block/Connection/Pulse/Buffer/ID/Value）
+    "crates/mesba_engine",     # 脉冲传播引擎（涟漪算法/衰减/累加/事件队列）
+    "crates/mesba_network",    # 网状区块网络管理（邻接表/mmap存储/拓扑/索引）
+    "crates/mesba_free",       # 游离机制十模块 + 认知八环状态机
+    "crates/mesba_memory",     # 三级记忆系统（感知缓冲/工作空间/情景记忆）
+    "crates/mesba_learning",   # 学习算法（Hebb更新/修剪/组块化/阈值/抽象/类比）
+    "crates/mesba_runtime",    # 推理运行时 + 外部 API + 安全门控
+    "crates/mesba_cli",        # 命令行工具
+]
+resolver = "2"
+
+# ---------------------------------------------------------------------------
+# 共享 package 元数据 —— 所有成员 crate 继承
+# ---------------------------------------------------------------------------
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+license = "MIT OR Apache-2.0"
+authors = ["MesBA Team"]
+description = "Mesh Block Architecture (MesBA) v2 — 以认知闭环为核心的脉冲驱动可执行记忆架构"
+
+# ---------------------------------------------------------------------------
+# 共享依赖版本锁定 —— 所有成员 crate 通过 workspace.dependencies 引用
+# 版本来源：crates.io 2026-10-16 最新稳定版
+# ---------------------------------------------------------------------------
+[workspace.dependencies]
+# 序列化（bincode 适合紧凑二进制，serde_json MVP 调试用，postcard 适合 no_std）
+serde = { version = "1.0.229", features = ["derive"] }
+bincode = "2.0.1"
+serde_json = "1.0.139"
+postcard = { version = "1.1.3", features = ["alloc"] }
+
+# 错误处理（thiserror 定义库错误类型，anyhow 用于应用层）
+thiserror = "2.0.21"
+anyhow = "1.0.104"
+
+# 日志/追踪（结构化日志，支持异步，适合追踪脉冲传播路径）
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+
+# 并行迭代（自动并行化脉冲独立分支传播，work-stealing 调度）
+rayon = "1.12.0"
+
+# 内存映射文件（安全封装，支持区块 SSD→RAM 映射）
+memmap2 = "0.9.11"
+
+# CLI
+clap = { version = "4.6.7", features = ["derive"] }
+
+# 随机数（ChaCha20Rng 确定性随机数，用于探索性脉冲注入）
+rand = "0.10.3"
+
+# ---------------------------------------------------------------------------
+# Release profile —— 针对 CPU 密集型推理的极致优化
+# ---------------------------------------------------------------------------
+[profile.release]
+opt-level = 3
+lto = "fat"                  # 跨 crate LTO，最大性能
+codegen-units = 1            # 单 codegen 单元，最佳优化
+panic = "abort"              # 去掉 unwind 开销
+strip = true                 # 剥离符号表
+# target-cpu = "native"     # 通过 RUSTFLAGS="-C target-cpu=native" 设置
+
+# ---------------------------------------------------------------------------
+# Development profile —— 快编译 + 合理优化
+# ---------------------------------------------------------------------------
+[profile.dev]
+opt-level = 2
+lto = false
+codegen-units = 16
+
+# ---------------------------------------------------------------------------
+# 顶层 package —— 默认 binary，作为整个项目的主入口
+# ---------------------------------------------------------------------------
+[package]
+name = "mesba"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description.workspace = true
+
+[dependencies]
+# 顶层主程序依赖 mesba_runtime 作为核心 API 入口
+mesba_runtime = { path = "crates/mesba_runtime" }
+clap.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

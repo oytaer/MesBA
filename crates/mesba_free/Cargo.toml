@@ -1,0 +1,17 @@
+[package]
+name = "mesba_free"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "MesBA free mechanism — ten-module cognitive control / eight-ring state machine"
+
+[dependencies]
+mesba_core = { path = "../mesba_core" }
+mesba_engine = { path = "../mesba_engine" }
+mesba_memory = { path = "../mesba_memory" }
+mesba_network = { path = "../mesba_network" }
+mesba_learning = { path = "../mesba_learning" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }

@@ -1,0 +1,21 @@
+[package]
+name = "mesba_runtime"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "MesBA inference runtime — inference API / session / safety gate"
+
+[dependencies]
+mesba_core = { path = "../mesba_core" }
+mesba_engine = { path = "../mesba_engine" }
+mesba_network = { path = "../mesba_network" }
+mesba_free = { path = "../mesba_free" }
+mesba_memory = { path = "../mesba_memory" }
+mesba_learning = { path = "../mesba_learning" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+bincode = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }

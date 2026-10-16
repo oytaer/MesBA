@@ -1,0 +1,15 @@
+[package]
+name = "mesba_engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "MesBA pulse propagation engine — ripple algorithm / event queue / decay / scheduler"
+
+[dependencies]
+mesba_core = { path = "../mesba_core" }
+mesba_network = { path = "../mesba_network" }
+serde = { workspace = true }
+thiserror = { workspace = true }
+rayon = { workspace = true }
+tracing = { workspace = true }
